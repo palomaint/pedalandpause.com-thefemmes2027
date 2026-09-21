@@ -42,7 +42,7 @@ In the Pages project's Settings → Variables and Secrets, configure Production:
 
 Store `SUPABASE_SERVICE_ROLE_KEY` and `TURNSTILE_SECRET_KEY` as encrypted secrets. Never put them in GitHub or chat. Redeploy after changing these settings. Keep Preview registration disabled and do not copy production secrets to previews.
 
-After reviewing booking conditions and the privacy notice, set Production `REGISTRATION_ENABLED=true`, redeploy, and submit a clearly labelled test. Check the stored row, edition, room, rental preference and price. Success must mean the database acknowledged storage. Email notifications and Google Sheets sync are not implemented. Requests do not reserve seats or take payment.
+After reviewing booking conditions and the privacy notice, set Production `REGISTRATION_ENABLED=true`, redeploy, and submit a clearly labelled test. Check the stored row, edition, room, rental preference and price. Success must mean the database acknowledged storage. Email notifications use Resend when configured below; Google Sheets sync is not implemented. Requests do not reserve seats or take payment.
 
 ## 4. Manage prices
 
@@ -56,3 +56,9 @@ References:
 - https://developers.cloudflare.com/pages/functions/advanced-mode/
 - https://developers.cloudflare.com/pages/configuration/custom-domains/
 - https://support.wix.com/en/article/connecting-a-wix-domain-to-an-external-site
+
+## Email notifications
+
+Production settings: `RESEND_API_KEY` (encrypted secret), `EMAIL_FROM` (verified sending-domain address), and `NOTIFICATION_EMAIL` (host inbox). Redeploy after setting them. Newly inserted requests send separate host and guest emails; replies to the guest acknowledgement go to the host inbox. Duplicate registration retries do not resend emails.
+
+Email errors do not change the saved booking result. Failed sends are logged with request ID and recipient role index (0 host, 1 guest), without message content or credentials. Automatic background retries are not implemented; check Resend and Supabase if delivery fails. Test with an address you control and confirm both messages arrive.
