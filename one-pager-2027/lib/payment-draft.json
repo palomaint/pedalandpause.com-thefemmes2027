@@ -1,0 +1,18 @@
+[
+  {
+    "id": "private_shared",
+    "tier": "private",
+    "room": "shared",
+    "cap": 4,
+    "paid": 0,
+    "url": "https://checkout.revolut.com/pay/b94fa495-2c8e-4f45-a315-3da753efafa3"
+  },
+  {
+    "id": "standard_shared",
+    "tier": "standard",
+    "room": "shared",
+    "cap": 6,
+    "paid": 0,
+    "url": "https://checkout.revolut.com/pay/40a996ce-4960-40ac-af51-0e7ba016b04a"
+  }
+]

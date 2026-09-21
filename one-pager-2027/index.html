@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Femmes 2027 &mdash; A Women&rsquo;s Cycling Camp in Spain | Pedal &amp; Pause</title>
-<meta name="description" content="The Femmes: a small-group women&rsquo;s cycling camp on Spain&rsquo;s quiet Costa del Azahar. 22&ndash;28 October 2027, Hotel Bellver, Benic&agrave;ssim. Six nights, five ride days, three pace options daily, a guest ambassador from inside the sport.">
+<meta name="description" content="TheFemmes 2027: six nights and five guided riding days near Benicàssim, Spain. 22–28 October. Ten places; first four private-release bookings €999, then €1,099.">
 <style>
   :root {
     --coral: #FE5756;
@@ -64,7 +64,7 @@
     margin-left: auto; background: var(--coral); color: var(--white);
     padding: 10px 18px; border: 1px solid var(--coral);
   }
-  .fm-nav a.fm-nav-cta:hover { background: #e94645; color: var(--white); }
+  .fm-nav a.fm-nav-cta:hover { background: var(--coral); color: var(--white); }
 
   /* Hero */
   .fm-hero {
@@ -407,7 +407,7 @@
     font-family: inherit;
   }
   .fm-btn-primary { background: var(--coral); color: var(--white); }
-  .fm-btn-primary:hover { background: #e94645; border-color: #e94645; }
+  .fm-btn-primary:hover { background: var(--coral); border-color: var(--coral); }
   .fm-btn-secondary { background: transparent; color: var(--ink); border-color: var(--ink); }
   .fm-btn-secondary:hover { background: var(--ink); color: var(--white); }
 
@@ -482,21 +482,39 @@
     .fm-counts { grid-template-columns: 1fr; }
     .fm-cta-section { padding: 72px 0 56px; }
   }
+
+  section[id], header[id], #top { scroll-margin-top: 92px; }
+  .fm-nav-links { display:flex; align-items:center; gap:22px; }
+  .fm-nav-inner { overflow:visible; }
+  .fm-menu-toggle { display:none; }
+  .sr-only { position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%); }
+  .skip-link { position:fixed;left:12px;top:-80px;z-index:100;background:white;padding:12px; }
+  .skip-link:focus { top:12px; }
+  button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible { outline:3px solid var(--coral);outline-offset:3px; }
+  .fm-form input,.fm-form select,.fm-form textarea { font-size:16px; }
+  .fm-card-static { letter-spacing:.06em; }
+  .fm-card-badge { max-width:calc(100% - 32px);left:16px; }
+  @media(max-width:1000px) {
+    .fm-nav-inner { flex-wrap:wrap;gap:10px;padding:10px 16px; }
+    .fm-nav-brand { margin-right:auto; }
+    .fm-menu-toggle { display:block;min-height:44px;padding:8px 12px;border:1px solid var(--line);background:white;color:var(--ink);font:inherit; }
+    .fm-nav-links { display:none;order:4;flex-basis:100%;flex-direction:column;align-items:stretch;gap:0; }
+    .fm-nav-links.is-open { display:flex; }
+    .fm-nav-links a { padding:14px 8px; }
+    .fm-nav a.fm-nav-cta { margin:0; padding:12px 10px;letter-spacing:.04em; }
+    .fm-nav a.fm-nav-brand { font-size:10px;letter-spacing:.06em; }
+    .fm-offer { gap:32px; }
+  }
+  @media(max-width:480px) { .fm-hero { padding:40px 0; } .fm-offer {margin-top:32px;} .fm-card-price{font-size:52px;} }
 </style>
 </head>
 <body>
-<nav class="fm-nav" aria-label="Sections">
-  <div class="fm-nav-inner">
-    <a class="fm-nav-brand" href="#top">The Femmes 2027</a>
-    <a href="#for-you">Is It For You</a>
-    <a href="#week">The Week</a>
-    <a href="#hotel">The Hotel</a>
-    <a href="#included">Included</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#faq">FAQ</a>
-    <a class="fm-nav-cta" href="#register">Register</a>
-  </div>
-</nav>
+<a class="skip-link" href="#top">Skip to content</a>
+<nav class="fm-nav" aria-label="Main navigation"><div class="fm-nav-inner">
+<a class="fm-nav-brand" href="#top">TheFemmes 2027</a>
+<button class="fm-menu-toggle" type="button" aria-expanded="false" aria-controls="fm-nav-links">Menu</button>
+<div id="fm-nav-links" class="fm-nav-links"><a href="#for-you">For you</a><a href="#week">The week</a><a href="#hosts">Your hosts</a><a href="#hotel">The hotel</a><a href="#included">Included</a><a href="#faq">FAQ</a></div>
+<a class="fm-nav-cta" href="#pricing">Prices &amp; booking</a></div></nav>
 
 <div class="femmes" id="top">
 
@@ -504,13 +522,13 @@
   <header class="fm-hero">
     <div class="fm-hero-release" id="fm-hero-release">Private release &middot; interest list first</div>
     <img class="fm-hero-logo" src="images/logo.png" alt="The Femmes">
-    <div class="fm-hero-year" aria-label="2027">2027</div>
-    <div class="fm-hero-edition">Second Edition &middot; 22 &ndash; 28 October &middot; Hotel Bellver, Benic&agrave;ssim</div>
-    <p class="fm-sub">A women&rsquo;s cycling camp on a stretch of the Spanish Mediterranean the international cycling world hasn&rsquo;t found yet. Small group. Real climbs. A four-star base between the pines and the sea. Cycling, taken seriously &mdash; without the noise.</p>
+    <h1 class="fm-hero-year"><span class="sr-only">TheFemmes </span>2027</h1>
+    <div class="fm-hero-edition">22–28 October 2027 · Hotel Masía Bellver · near Benicàssim</div>
+    <p class="fm-sub">Five days on the bike. Six nights by the Mediterranean. Join Paloma and David for a small-group women’s cycling camp, with climbs to look forward to and time to recover together.</p>
     <div class="fm-tagline">Pedal. Pause. Belong.</div>
 
     <div class="fm-buttons">
-      <a class="fm-btn fm-btn-primary fm-book-btn" href="#pricing" data-track="hero_book">Secure my &euro;999 place</a>
+      <a class="fm-btn fm-btn-primary fm-book-btn" href="#pricing" data-track="hero_book">See prices &amp; release</a>
       <a class="fm-btn fm-btn-secondary" href="https://wa.me/34648565635?text=Hi%2C%20I%27d%20like%20to%20know%20more%20about%20The%20Femmes%202027" target="_blank" rel="noopener">Ask us anything</a>
     </div>
     <p class="fm-hero-fine" id="fm-hero-fine">Ten places. The first four go to the interest list at &euro;999 &mdash; &euro;100 under the public price. A &euro;150 deposit reserves yours.</p>
@@ -526,11 +544,11 @@
       </div>
       <div>
         <div class="fm-meta-label">Location</div>
-        <div class="fm-meta-value">Hotel Bellver, Benic&agrave;ssim</div>
+        <div class="fm-meta-value">Hotel Masía Bellver, near Benicàssim</div>
       </div>
       <div>
         <div class="fm-meta-label">Group</div>
-        <div class="fm-meta-value">Deliberately small</div>
+        <div class="fm-meta-value">Maximum ten guests</div>
       </div>
     </div>
   </header>
@@ -548,19 +566,17 @@
   <section class="fm-section" id="about">
     <span class="fm-section-label">The Proposition</span>
     <h2>A different kind of women&rsquo;s cycling camp.</h2>
-    <p class="fm-lead">Most women&rsquo;s camps lean wellness, or lean beginner, or lean Mallorca. The Femmes is none of those.</p>
-    <p class="fm-body">It&rsquo;s a real week of riding &mdash; three pace options every day, real climbs, a support van that follows every kilometre &mdash; held on a coast quiet enough that you&rsquo;ll wonder why nobody else has been telling you about it. You&rsquo;ll ride with a guest ambassador from inside the sport, follow a personalised training plan before you arrive, and go home with Field Notes &mdash; routes, sessions, what to work on next &mdash; so the week keeps working after you&rsquo;ve flown back.</p>
+    <p class="fm-lead">For women who enjoy riding, want company on the climbs and appreciate a good dinner afterwards.</p>
+    <p class="fm-body">A week of guided riding on the Costa del Azahar, hosted by Paloma and David. Expect coastal roads, climbing days and a gentler recovery ride. Come with a friend or join on your own.</p>
 
     <div class="fm-pillars">
       <div class="fm-pillar">
         <div class="fm-pillar-num">01</div>
-        <h3>A guest ambassador</h3>
-        <p>Each edition brings a guest ambassador from inside women&rsquo;s cycling into the week. This year&rsquo;s will be announced nearer the time.</p>
+        <h3>Your hosts</h3><p>Paloma and David guide the rides and host the week. Meet the people you’ll be riding with below.</p>
       </div>
       <div class="fm-pillar">
         <div class="fm-pillar-num">02</div>
-        <h3>Sports Science-led</h3>
-        <p>A female-specific training and recovery framework built in &mdash; not bolted on &mdash; by Paloma (Sports Science, Universitat de Val&egrave;ncia).</p>
+        <h3>Ride and recover</h3><p>Five riding days, one recovery massage and time between the rides to enjoy your surroundings.</p>
       </div>
       <div class="fm-pillar">
         <div class="fm-pillar-num">03</div>
@@ -569,8 +585,7 @@
       </div>
       <div class="fm-pillar">
         <div class="fm-pillar-num">04</div>
-        <h3>A real curriculum</h3>
-        <p>Pre-arrival plan, bike position check, daily briefings, three evening sessions, recovery workshop, personal feedback, take-home Field Notes.</p>
+        <h3>A small group</h3><p>A maximum of ten guests, with shared dinners and time to get to know the other riders.</p>
       </div>
     </div>
 
@@ -585,16 +600,16 @@
   <section class="fm-section" id="for-you">
     <span class="fm-section-label">Is It For You</span>
     <h2>Who this week is built for.</h2>
-    <p class="fm-body">We&rsquo;d rather be straight with you now than have you arrive to the wrong week. The range of riders is wide &mdash; from social riders who ride for the love of it to women training with a target in mind &mdash; and the multi-level routes are built to hold all of it. What everyone shares is wanting to be on the bike five days out of seven.</p>
+    <p class="fm-body">This is an active cycling week. You should be comfortable riding regularly and climbing on a road bike. Talk to us about your usual distance and pace before booking if you’re unsure whether it fits.</p>
 
     <div class="fm-cols">
       <div class="fm-col">
         <h3>This is your week if</h3>
         <ul class="fm-list">
-          <li>You ride regularly &mdash; socially or with a target in mind &mdash; and by October you&rsquo;ll be comfortable at 50 km with some climbing. Not there yet? Your training plan is built to get you there</li>
-          <li>You want real riding &mdash; climbs, a Queen Stage, a van that follows every kilometre &mdash; not a wellness retreat with bikes</li>
-          <li>You&rsquo;d like to come back a better cyclist, not just a browner one</li>
-          <li>You&rsquo;re happy in a small group of women, most of whom arrive on their own</li>
+          <li>You ride regularly and enjoy a mix of coastal roads and climbing</li>
+          <li>You want five days of riding with other women</li>
+          <li>You enjoy a challenge with time to recover afterwards</li>
+          <li>You’re happy to join a small group, on your own or with a friend</li>
           <li>You like the idea of a small group and a shared table &mdash; dinner is together most nights</li>
         </ul>
       </div>
@@ -603,28 +618,27 @@
         <ul class="fm-list">
           <li>You want a solo trip on your own schedule &mdash; this is a group week, and the group is the point</li>
           <li>You&rsquo;d rather sunbathe than be on the bike five days out of seven</li>
-          <li>You need every day structured and optional &mdash; the Queen Stage is the heart of the week</li>
+          <li>You need a fully individual itinerary rather than a hosted group week</li>
         </ul>
       </div>
     </div>
 
     <div class="fm-terms">
-      <h4>A long way off that today?</h4>
-      <p>Tell us anyway. Once you book, you&rsquo;ll fill in a short fitness questionnaire &mdash; current training hours, longest recent ride, injuries, what you&rsquo;d like to work on &mdash; and we build a <strong>personalised pre-arrival training plan</strong> from your answers, sized to whatever runway you have. If you&rsquo;re short of the mark we&rsquo;ll build the plan to get you closer. If you&rsquo;re well beyond it, we&rsquo;ll build it to sharpen you rather than build you.</p>
+      <h4>Already working with a coach?</h4><p>You’re welcome. Discuss the camp with your coach and ask us about the planned riding before you book. This is a hosted cycling week; a personal coaching programme is not included.</p>
     </div>
   </section>
 
   <!-- THE WEEK -->
   <section class="fm-section" id="week">
     <span class="fm-section-label">The Week</span>
-    <h2>Six nights. Five rides. Three pace options every day.</h2>
-    <p class="fm-body">Every ride day has short, medium and long route options. You pick the level that suits you on the morning &mdash; and you can pick differently tomorrow. The support van follows every ride: hydration, snacks, spares, and space for any rider who needs a break or a lift.</p>
+    <h2>Six nights. Five days on the bike.</h2>
+    <p class="fm-body">The itinerary below is a proposed outline. Final distances, group arrangements and support are confirmed before booking opens. Routes may change with conditions; separate guided groups at every distance are not promised.</p>
 
     <div class="fm-rows fm-week">
       <div class="fm-row">
         <div class="fm-row-label">Fri &middot; 22</div>
         <div class="fm-row-title">Arrival &amp; welcome dinner</div>
-        <div class="fm-row-detail">Bike position check</div>
+        <div class="fm-row-detail">Settle in and meet your hosts</div>
         <div class="fm-row-detail">First introductions</div>
       </div>
       <div class="fm-row">
@@ -653,7 +667,7 @@
       </div>
       <div class="fm-row">
         <div class="fm-row-label">Wed &middot; 27</div>
-        <div class="fm-row-title">Coastal recovery &amp; sommelier dinner</div>
+        <div class="fm-row-title">Coastal recovery &amp; farewell dinner</div>
         <div class="fm-row-detail"><strong>35 / 50</strong> km</div>
         <div class="fm-row-detail">Recovery massages &middot; a gentle closing</div>
       </div>
@@ -669,7 +683,7 @@
     <p class="fm-body">Most ride days follow roughly the same shape. Nothing is fixed &mdash; the group&rsquo;s pace and the weather set the exact times &mdash; but this is the rhythm:</p>
 
     <div class="fm-rows fm-rhythm">
-      <div class="fm-row"><div class="fm-row-label">07:30 &ndash; 08:30</div><div class="fm-row-title">Breakfast at Hotel Bellver</div></div>
+      <div class="fm-row"><div class="fm-row-label">07:30 &ndash; 08:30</div><div class="fm-row-title">Breakfast at Hotel Masía Bellver</div></div>
       <div class="fm-row"><div class="fm-row-label">08:45</div><div class="fm-row-title">Morning ride briefing &mdash; route map, key segments, kit for the day</div></div>
       <div class="fm-row"><div class="fm-row-label">09:00</div><div class="fm-row-title">Ride out</div></div>
       <div class="fm-row"><div class="fm-row-label">13:00 &ndash; 15:00</div><div class="fm-row-title">Ride back, lunch, downtime</div></div>
@@ -681,46 +695,10 @@
   </section>
 
   <!-- THE RIDES -->
-  <section class="fm-section" id="rides">
-    <span class="fm-section-label">The Rides</span>
-    <h2>Day by day.</h2>
-
-    <div class="fm-pillars">
-      <div class="fm-pillar">
-        <div class="fm-pillar-num">Saturday</div>
-        <h3>Coastal warm-up</h3>
-        <p>A gentle reintroduction to the bike after travel days. Rolling coastal roads, a caf&eacute; stop at the halfway, back for a proper lunch. This is the day everyone finds their group and their pace.</p>
-      </div>
-      <div class="fm-pillar">
-        <div class="fm-pillar-num">Sunday</div>
-        <h3>Desierto de les Palmes</h3>
-        <p>The first proper climb of the week &mdash; switchbacks through pine forest to a summit with sea views. Not as long as it looks on paper, but a genuine challenge. The shorter option skirts the climb; the medium and long options go over the top.</p>
-      </div>
-      <div class="fm-pillar">
-        <div class="fm-pillar-num">Monday</div>
-        <h3>Skills &amp; recovery</h3>
-        <p>A shorter morning ride focused on technique &mdash; group riding, descending, climbing form. Afternoon is yours: beach, pool, or a book. There&rsquo;s an optional mobility-for-cyclists session for anyone who wants it.</p>
-      </div>
-      <div class="fm-pillar fm-queen">
-        <div class="fm-pillar-num">Tuesday</div>
-        <h3>The Queen Stage</h3>
-        <p>The week&rsquo;s big day. 80, 100, or 120 km with 1,200 to 1,800 metres of climbing, through the climbs and coastal roads that define this part of Spain. Nobody rides this day without earning something from it.</p>
-      </div>
-      <div class="fm-pillar">
-        <div class="fm-pillar-num">Wednesday</div>
-        <h3>Coastal recovery + sommelier dinner</h3>
-        <p>A gentler ride to close the week and a long lunch on the road. In the afternoon the masseuse comes to the hotel for recovery massages &mdash; then it&rsquo;s time to change for the sommelier dinner: one of Hotel Bellver&rsquo;s signature tasting menus, matched with wines from Castell&oacute;n producers. Usually the dinner people remember longest.</p>
-      </div>
-    </div>
-  </section>
+  
 
   <!-- GUEST AMBASSADOR -->
-  <section class="fm-section" id="ambassador">
-    <span class="fm-section-label">Guest Ambassador</span>
-    <h2>Someone from inside the sport rides with us.</h2>
-    <p class="fm-lead">Every edition of The Femmes brings a guest ambassador into the week &mdash; a woman from inside cycling, on the road with you in the mornings and at the table in the evenings.</p>
-    <p class="fm-body">We&rsquo;ll announce who is joining the 2027 edition nearer the time. What we can say now is that it&rsquo;s the same idea as the first: someone who knows this sport from the inside and is generous with it. Not a name on a poster &mdash; a rider in the group.</p>
-  </section>
+  <section class="fm-section" id="hosts"><span class="fm-section-label">Your hosts</span><h2>Ride with Paloma and David.</h2><p class="fm-lead">We’ll be your guides and your hosts throughout the week.</p><p class="fm-body">Ask us about the riding, coming on your own or sharing a room. You’ll be speaking directly with the people organising your camp.</p><a class="fm-btn fm-btn-secondary" href="https://wa.me/34648565635" target="_blank" rel="noopener">Ask Paloma about the week</a></section>
 
 </div>
 
@@ -734,102 +712,47 @@
 
   <!-- WHAT'S INCLUDED -->
   <section class="fm-section" id="included">
-    <span class="fm-section-label">What&rsquo;s Included</span>
-    <h2>The whole week, taken care of.</h2>
-
-    <div class="fm-cols fm-cols-3">
-      <div class="fm-col">
-        <h3>The cycling</h3>
-        <ul class="fm-list">
-          <li>5 days of guided rides with short, medium and long route options</li>
-          <li>Support vehicle every ride day &mdash; hydration, snacks, spares, lift if needed</li>
-          <li>On-ride nutrition throughout</li>
-          <li>One recovery massage &mdash; the masseuse comes to the hotel on Wednesday afternoon</li>
-        </ul>
-      </div>
-      <div class="fm-col">
-        <h3>The education</h3>
-        <ul class="fm-list">
-          <li>Personalised pre-arrival training plan, built from your fitness questionnaire</li>
-          <li>Bike position check on Friday afternoon &mdash; before the Queen Stage matters</li>
-          <li>Morning ride briefing every day with route map and key segments</li>
-          <li>Three evening sessions &mdash; climbing, descending, race-day kit &amp; fuelling. Dinner-table conversations, not lectures</li>
-          <li>Recovery and nutrition workshop one evening</li>
-          <li>Mobility-for-cyclists session on the recovery day</li>
-          <li>Personal end-of-week feedback session &mdash; three things to work on when you get home</li>
-          <li>The Femmes Field Notes &mdash; take-home PDF with route GPS files and session summaries</li>
-        </ul>
-      </div>
-      <div class="fm-col">
-        <h3>The week</h3>
-        <ul class="fm-list">
-          <li>6 nights at Hotel Bellver 4&#9733;, Benic&agrave;ssim &mdash; double-share, en-suite, sea-view balconies where available</li>
-          <li>All breakfasts and dinners, including the sommelier dinner &mdash; one of Bellver&rsquo;s signature tasting menus</li>
-          <li>Your camp jersey &mdash; women-specific cut, made properly, yours to keep</li>
-          <li>Professional photo and video package &mdash; 30+ images and one short film, within two weeks of camp</li>
-          <li>Membership of The Femmes alumni network</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="fm-cols" style="margin-top:64px;">
-      <div class="fm-col fm-col-out">
-        <h3>Not included</h3>
-        <ul class="fm-list">
-          <li>Flights &mdash; Valencia (VLC), Castell&oacute;n-Costa Azahar (CDT) or Reus (REU)</li>
-          <li>Your bike &mdash; bring your own; road bike with compact gearing recommended</li>
-          <li>Airport transfers &mdash; available from Valencia, Castell&oacute;n and Reus. Request a transfer when you book and we&rsquo;ll send a price</li>
-          <li>Travel insurance covering cycling activity &mdash; required, easy to arrange</li>
-          <li>Lunches on free days</li>
-          <li>Single occupancy &mdash; +&euro;360 for the week if you&rsquo;d like the room to yourself</li>
-        </ul>
-      </div>
-      <div class="fm-col fm-col-out">
-        <h3>Nothing to work out yet</h3>
-        <ul class="fm-list">
-          <li>No kit list to decipher now &mdash; a full packing guide comes once you&rsquo;re booked</li>
-          <li>No tools or spare tubes needed &mdash; the van carries spares and there&rsquo;s secure bike storage at the hotel</li>
-          <li>No training plan to invent &mdash; we build yours from your questionnaire</li>
-          <li>No GPX hunting &mdash; all fifteen route variants are shared before you travel</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+<span class="fm-section-label">What’s included</span><h2>Your week at a glance.</h2>
+<div class="fm-cols"><div class="fm-col"><h3>Included in your camp price</h3><ul class="fm-list">
+<li>Six nights in a shared room at Hotel Masía Bellver</li><li>Five days of guided cycling with Paloma and David</li><li>Six dinners</li><li>One recovery massage</li><li>Your camp jersey</li><li>Welcome goody bag with gels</li></ul></div>
+<div class="fm-col"><h3>Plan separately</h3><ul class="fm-list"><li>Flights</li><li>Bike rental — premium carbon bikes with electronic shifting, including Specialized, Cube and other brands. Priced separately; model and size subject to availability. You can also bring your own bike.</li><li>Airport transfers — request a separate quote</li><li>Lunches, café stops and additional ride nutrition</li><li>Your travel and cycling insurance</li><li>Single occupancy: €360 extra for six nights, subject to availability</li></ul></div></div>
+<p class="fm-body" style="margin-top:24px">The breakfast arrangement is being finalised and will be confirmed before booking opens. </p>
+</section>
 
 </div>
 
 <!-- HOTEL FEATURE IMAGE -->
 <div class="fm-feature">
-  <img src="images/hotel-aerial.jpg" style="object-position: center 78%;" alt="Aerial view of Hotel Bellver, the pool, the pines and the Benic&agrave;ssim coastline">
+  <img src="images/hotel-aerial.jpg" style="object-position: center 78%;" alt="Aerial view of Hotel Masía Bellver, the pool, the pines and the Benic&agrave;ssim coastline">
 </div>
 
 <!-- HOTEL + FOOD - cream band -->
 <div class="fm-bleed">
   <div class="femmes">
     <section class="fm-section fm-cream" id="hotel">
-      <span class="fm-section-label">Your Base &middot; Hotel Bellver</span>
+      <span class="fm-section-label">Your Base &middot; Hotel Masía Bellver</span>
       <h2>Benic&agrave;ssim, on the Costa del Azahar.</h2>
-      <p class="fm-lead">Hotel Bellver is a four-star coastal retreat in Benic&agrave;ssim, set between Mediterranean pines and the open sea. Modern Spanish design, a pool surrounded by palms, sea-view balconies, and the kind of unhurried atmosphere that makes the difference between a holiday and a recovery.</p>
-      <p class="fm-body">It&rsquo;s our home for all six nights &mdash; the place where the day ends, the rides reset, and the group becomes friends. Breakfast and dinner are here most days, and the bikes sleep here too.</p>
+      <p class="fm-lead">Hotel Masía Bellver is our planned base near Benicàssim, in Les Playetes, Oropesa del Mar.</p>
+      <p class="fm-body">Six nights in one base, with time to unwind between rides. Room type, meals and practical arrival details will be confirmed before booking opens.</p>
 
       <div class="fm-cols">
         <div class="fm-col">
           <h3>Your room</h3>
           <ul class="fm-list">
             <li>Double-share as standard &mdash; a room for two, shared with another rider, with your own en-suite bathroom</li>
-            <li>Sea-view balconies where available; every room has the pines, the light and somewhere to sit</li>
+            <li>Room views and balconies depend on the allocated room category; they are not guaranteed</li>
             <li><strong>Single occupancy &mdash; +&euro;360</strong> for the week. The room to yourself, same en-suite</li>
             <li>Travelling with a friend? Tell us when you register and we&rsquo;ll room you together</li>
-            <li>Secure bike storage at the hotel &mdash; your bike never sleeps outside</li>
+            <li>Bike storage arrangements will be confirmed before booking opens</li>
           </ul>
         </div>
         <div class="fm-col">
           <h3>The table</h3>
           <ul class="fm-list">
-            <li>Full breakfast at the hotel every morning from 07:30 &mdash; the cyclist&rsquo;s version, not the continental one</li>
-            <li>On the bike: hydration, energy drink, bananas, gels, bars and something salty, at set stops</li>
-            <li>Dinners rotate between the hotel and local restaurants in Benic&agrave;ssim and Castell&oacute;n &mdash; Mediterranean, generous, cyclist portions</li>
-            <li>The sommelier dinner &mdash; one of Bellver&rsquo;s signature tasting menus, <em>Men&uacute; El Puente</em> or <em>Men&uacute; Bosque</em>, matched with wines from Castell&oacute;n producers</li>
+            <li>Breakfast arrangements and serving times will be confirmed before booking opens</li>
+            <li>Welcome goody bag with gels; bring your preferred additional ride nutrition</li>
+            <li>Six dinners are included; menus and venues will be confirmed</li>
+            <li>A farewell dinner together on the final evening</li>
             <li>Most dietary requirements catered for &mdash; tell us when you register</li>
           </ul>
         </div>
@@ -837,11 +760,11 @@
 
       <div class="fm-gallery">
         <figure>
-          <div class="fm-shot"><img src="images/hotel-pool.jpg" alt="The pool at Hotel Bellver, seen from above through the pines"></div>
+          <div class="fm-shot"><img src="images/hotel-pool.jpg" alt="The pool at Hotel Masía Bellver, seen from above through the pines"></div>
           <figcaption>The pool</figcaption>
         </figure>
         <figure>
-          <div class="fm-shot"><img src="images/hotel-room.jpg" alt="A guest room at Hotel Bellver with white linen and oak panelling"></div>
+          <div class="fm-shot"><img src="images/hotel-room.jpg" alt="A guest room at Hotel Masía Bellver with white linen and oak panelling"></div>
           <figcaption>Your room</figcaption>
         </figure>
         <figure>
@@ -849,7 +772,7 @@
           <figcaption>Rooms with balconies</figcaption>
         </figure>
         <figure>
-          <div class="fm-shot"><img class="fm-shot-right" src="images/hotel-suite.jpg" alt="A sitting area with sofa and desk beside a terrace at Hotel Bellver"></div>
+          <div class="fm-shot"><img class="fm-shot-right" src="images/hotel-suite.jpg" alt="A sitting area with sofa and desk beside a terrace at Hotel Masía Bellver"></div>
           <figcaption>Room to unwind</figcaption>
         </figure>
         <figure>
@@ -857,7 +780,7 @@
           <figcaption>The balcony</figcaption>
         </figure>
         <figure>
-          <div class="fm-shot"><img src="images/hotel-view.jpg" alt="Pines, palms and the Mediterranean seen from Hotel Bellver"></div>
+          <div class="fm-shot"><img src="images/hotel-view.jpg" alt="Pines, palms and the Mediterranean seen from Hotel Masía Bellver"></div>
           <figcaption>Between the pines and the sea</figcaption>
         </figure>
         <figure>
@@ -872,7 +795,7 @@
 
       <div class="fm-terms">
         <h4>A note on rooms</h4>
-        <p>Rooms are shared by two riders, each with her own bed and a shared en-suite. If you&rsquo;re coming alone we&rsquo;ll pair you with another solo rider &mdash; and we take care over who. If you&rsquo;d rather have the room to yourself, single occupancy is <strong>+&euro;360 for the week</strong>; choose it on the registration form or tell us when you book.</p>
+        <p>Shared rooms are intended for two riders with separate beds and an en-suite; the allocated room configuration will be confirmed before booking. If you&rsquo;re coming alone we&rsquo;ll pair you with another solo rider &mdash; and we take care over who. If you&rsquo;d rather have the room to yourself, single occupancy is <strong>+&euro;360 for the week</strong>; ask us to confirm availability before booking.</p>
       </div>
     </section>
   </div>
@@ -885,24 +808,24 @@
     <span class="fm-section-label">The Group</span>
     <h2>You&rsquo;ll know everyone&rsquo;s name by Sunday and everyone&rsquo;s coffee order by Monday.</h2>
     <p class="fm-lead">That&rsquo;s part of the point. The Femmes is a deliberately small group of women.</p>
-    <p class="fm-body">Most guests come alone. A few come with a friend. Everyone leaves with a group. Ages usually range across 30s to 50s, most riders based in the UK and Northern Europe, with some Spanish and international. The language of the camp is primarily English &mdash; some conversations will happen in Spanish or French, and that&rsquo;s part of the fun.</p>
+    <p class="fm-body">Come on your own or with a friend. The camp is hosted in English, and we’ll help solo guests arrange room sharing.</p>
 
     <div class="fm-cols">
       <div class="fm-col">
         <h3>Travelling alone?</h3>
         <ul class="fm-list">
-          <li>Most riders at The Femmes are &mdash; the group is small enough that nobody stays a stranger</li>
+          <li>Solo guests are welcome; let us know if you would like help arranging a room share</li>
           <li>Picked up at the airport if you&rsquo;ve arranged a transfer</li>
           <li>Welcomed at the hotel, given time to settle in, introduced at dinner</li>
-          <li>Nothing about arriving alone is awkward. Genuinely</li>
+          <li>Meet the group at the welcome dinner</li>
         </ul>
       </div>
       <div class="fm-col">
         <h3>Getting here</h3>
         <ul class="fm-list">
-          <li><strong>Valencia (VLC)</strong> &mdash; best connected, about 60 minutes away; direct trains from the city take 35&ndash;40 minutes. Usually the best pick from the UK</li>
-          <li><strong>Castell&oacute;n-Costa Azahar (CDT)</strong> &mdash; closest at around 30 minutes; fewer international routes</li>
-          <li><strong>Reus (REU)</strong> &mdash; about 90 minutes north, near Tarragona; worth checking for cheap direct flights</li>
+          <li><strong>Valencia (VLC)</strong> — check flights and onward transport for your dates</li>
+          <li><strong>Castellón-Costa Azahar (CDT)</strong> — another airport option for the camp</li>
+          <li><strong>Reus (REU)</strong> — farther north; ask us about onward transport before booking flights</li>
           <li>Transfers aren&rsquo;t included, but we can arrange one from any of the three &mdash; tick &ldquo;request a transfer&rdquo; on the form and we&rsquo;ll send a price</li>
         </ul>
       </div>
@@ -910,35 +833,12 @@
 
     <div class="fm-terms">
       <h4>Arrival &amp; departure</h4>
-      <p>Check in at Hotel Bellver from <strong>15:00 on Friday 22 October</strong>; bike position checks run through the afternoon and the welcome dinner is at 19:30. Departure on <strong>Thursday 28 October</strong> is after breakfast, with most guests heading off between 10:00 and 12:00. Mid-October on the Costa del Azahar usually means 20&ndash;24&deg;C in the day and 12&ndash;15&deg;C in the mornings, mostly sunny, with a small chance of a shower.</p>
+      <p>Arrival is Friday 22 October 2027 and departure is Thursday 28 October. Check-in, dinner and departure times will be confirmed. Late-October weather can vary: bring layers and rain protection. Wait for written departure confirmation before making non-refundable travel arrangements.</p>
     </div>
   </section>
 
   <!-- MEMORIES -->
-  <section class="fm-section" id="remember">
-    <span class="fm-section-label">Off the Record</span>
-    <h2>The parts riders say they remember.</h2>
-    <p class="fm-body">Not the things we put on the brochure &mdash; the things that come up when you ask someone how the week was.</p>
-
-    <div class="fm-memories">
-      <div class="fm-memory">
-        <h3><span>The Sunday climb.</span></h3>
-        <p>Desierto de les Palmes isn&rsquo;t the biggest climb of the week &mdash; that&rsquo;s the Queen Stage &mdash; but it&rsquo;s the first proper one, and there&rsquo;s a particular moment on the way up where the switchbacks open out and the Mediterranean appears below you. One of the best five-minute stretches of the week.</p>
-      </div>
-      <div class="fm-memory">
-        <h3><span>The Monday afternoon.</span></h3>
-        <p>The recovery day is when the group settles. People pair off, some go to the beach, some to the pool, some read on the balcony. It&rsquo;s the day the group starts feeling like a group.</p>
-      </div>
-      <div class="fm-memory">
-        <h3><span>The Tuesday dinner.</span></h3>
-        <p>After the Queen Stage, everyone comes back a little quieter than they left, and dinner that evening runs long. The stories from the day come out slowly. Usually the meal riders remember most sharply.</p>
-      </div>
-      <div class="fm-memory">
-        <h3><span>The Thursday goodbye.</span></h3>
-        <p>Slower than you think. Everyone lingers over breakfast. The riders you barely knew on Friday are the ones you&rsquo;re now planning next year&rsquo;s cycling with. That&rsquo;s the pattern, week after week.</p>
-      </div>
-    </div>
-  </section>
+  
 
 </div>
 
@@ -958,41 +858,42 @@
           <div class="fm-card-price">&euro;999</div>
           <div class="fm-card-detail">Per person &middot; shared double room</div>
           <p class="fm-card-benefit">&euro;100 less than the public-release price, with the same camp inclusions.</p>
-          <p class="fm-card-pay">Reserve with <strong>&euro;150</strong> today. Remaining balance: <strong>&euro;849</strong>.</p>
-          <div id="fm-private-action"><a class="fm-btn fm-btn-primary fm-book-btn" href="#register" data-tier="private" data-track="private_book">Secure my &euro;999 place</a></div>
+          <p class="fm-card-pay" id="fm-private-pay">Reserve with <strong>&euro;150</strong> today. Remaining balance: <strong>&euro;849</strong>.</p>
+          <div id="fm-private-action"><span class="fm-card-static">Booking availability loading</span></div>
           <p class="fm-card-fine">Your place is reserved when your deposit is paid. Registering interest does not hold a place.</p>
 
           <div class="fm-deadline" id="fm-deadline">
             <div class="fm-deadline-label" id="fm-deadline-label">Private pricing ends in</div>
-            <div class="fm-countdown" id="fm-countdown" aria-live="polite">
+            <div class="fm-countdown" id="fm-countdown" hidden>
               <div><b id="cd-d">&ndash;</b><span>days</span></div>
               <div><b id="cd-h">&ndash;</b><span>hours</span></div>
               <div><b id="cd-m">&ndash;</b><span>minutes</span></div>
             </div>
-            <p class="fm-deadline-when" id="fm-deadline-when">Ends <span data-date="privateDeadline">[date]</span>, or when four private-release places are booked&mdash;whichever comes first.</p>
+            <p class="fm-deadline-when" id="fm-deadline-when">Release dates will be confirmed before booking opens.</p>
           </div>
 
           <div class="fm-counts">
-            <div class="fm-count"><b id="fm-private-left">4</b>of 4 private-release places available</div>
-            <div class="fm-count"><b id="fm-total-left">10</b>of 10 camp places available overall</div>
+            <div class="fm-count"><b id="fm-private-left">—</b>of 4 first-price places available</div>
+            <div class="fm-count"><b id="fm-total-left">—</b>of 10 camp places available overall</div>
           </div>
         </div>
 
         <!-- PUBLIC RELEASE -->
         <div class="fm-card fm-card-public" id="fm-card-public">
-          <div class="fm-card-label">Public release</div>
+          <div class="fm-card-label">Standard price</div>
           <div class="fm-card-price">&euro;1,099</div>
           <div class="fm-card-detail">Per person &middot; shared double room</div>
-          <p class="fm-card-benefit" id="fm-public-copy">Remaining places open to public booking on <span data-date="publicOpens">[date]</span>.</p>
+          <p class="fm-card-benefit" id="fm-public-copy">The list can book remaining places at €1,099 after the first four €999 bookings.</p>
           <p class="fm-card-pay"><strong>&euro;150</strong> deposit. Remaining balance: <strong>&euro;949</strong>.</p>
-          <div id="fm-public-action"><span class="fm-card-static">Opens <span data-date-short="publicOpens">[date]</span></span></div>
+          <div id="fm-public-action"><span class="fm-card-static">Booking availability loading</span></div>
           <div class="fm-counts" id="fm-public-counts" hidden>
-            <div class="fm-count"><b id="fm-total-left-2">10</b>of 10 camp places available overall</div>
+            <div class="fm-count"><b id="fm-total-left-2">—</b>of 10 camp places available overall</div>
           </div>
         </div>
       </div>
 
-      <div class="fm-value">
+      <p id="fm-availability-note" class="fm-card-fine">Availability will be confirmed when booking opens.</p>
+<div class="fm-value">
         <h4>What every place includes</h4>
         <ul>
           <li>Six nights in a shared double room</li>
@@ -1000,24 +901,13 @@
           <li>Six dinners</li>
           <li>One recovery massage</li>
           <li>Camp jersey</li>
-          <li>Five Nutrinovex gels</li>
+          <li>Welcome goody bag with gels</li>
         </ul>
       </div>
 
-      <p class="fm-offer-summary"><strong>Single occupancy costs extra. Airport transfers are excluded.</strong> See the <a href="#included">full inclusions</a>, <a href="#hotel">room options</a> and the booking terms below. Prices include 21% VAT. The &euro;150 deposit is deducted from your total, not added to it.</p>
+      <p class="fm-offer-summary"><strong>Single occupancy, bike rental and airport transfers are priced separately.</strong> See the <a href="#included">full inclusions</a>, <a href="#hotel">room options</a> and the booking terms below. Prices include applicable taxes. The &euro;150 deposit is deducted from your total, not added to it.</p>
 
-      <div class="fm-terms">
-        <h4>Booking terms</h4>
-        <ul class="fm-terms-list">
-          <li>&euro;150 deposit reserves your place and is deducted from the total</li>
-          <li>Balance (&euro;849 private release / &euro;949 public release) due 60 days before camp &mdash; 23 August 2027 &mdash; by Revolut link, card or bank transfer</li>
-          <li><strong>Free cancellation</strong> within 14 days of booking, or up to 30 days before camp (22 September 2027), whichever comes first &mdash; full deposit refunded</li>
-          <li>50% refund between 30 and 14 days before camp</li>
-          <li>Within 14 days, no refund &mdash; but your spot transfers to another rider or a future camp, subject to availability</li>
-          <li id="fm-min-group">The camp runs with a minimum of <span data-config="minGroup">[N]</span> riders. We confirm the departure by <span data-date-short="confirmBy">[date]</span>; if it doesn&rsquo;t run, you get everything back</li>
-          <li>If we cancel or postpone, you get everything back plus first refusal on the new date</li>
-        </ul>
-      </div>
+      <div class="fm-terms" id="booking-terms"><h4>Before you book</h4><ul class="fm-terms-list"><li>The €150 deposit is part of your total, not an extra charge.</li><li>Shared room totals: €999 first release / €1,099 standard. Remaining balance after deposit: €849 / €949.</li><li>Single room totals: €1,359 first release / €1,459 standard. Remaining balance after deposit: €1,209 / €1,309. Subject to room availability.</li><li>Balance due: 23 August 2027.</li><li id="fm-terms-pending">Bookings are not yet open. Cancellation terms, the minimum group and departure-confirmation arrangements will be published before deposits are accepted.</li></ul></div>
 
       <p class="fm-body" style="margin-top:32px;">Travel insurance covering cycling activity is required &mdash; and we&rsquo;d recommend one that covers trip cancellation too.</p>
     </section>
@@ -1026,56 +916,38 @@
 
 <div class="femmes">
 
-  <!-- FAQ -->
+  <section class="fm-section" id="book" hidden>
+<span class="fm-section-label">Reserve your place</span><h2>Choose your room.</h2>
+<p class="fm-lead">Pay the €150 deposit securely with Revolut. Your total and remaining balance are shown below.</p>
+<form id="booking-form" class="fm-form">
+<label for="booking-room">Room and total price</label><select id="booking-room" required></select>
+<p id="booking-summary" class="fm-offer-summary" aria-live="polite"></p>
+<p><a id="booking-terms-link" target="_blank" rel="noopener" hidden>Read the booking and cancellation terms</a></p>
+<label class="fm-check"><input id="accept-terms" type="checkbox" required> I have read and accept the booking terms, total price and departure-confirmation conditions.</label>
+<button id="checkout-button" class="fm-btn fm-btn-primary" type="submit">Continue to Revolut · €150 deposit</button>
+<p class="fm-card-fine">A completed payment reserves one guest place. An enquiry does not. If the payment link is full, return here for current availability. Do not make a second payment if you already have a receipt.</p>
+<p id="checkout-status" role="status" aria-live="polite"></p></form></section>
+<!-- FAQ -->
   <section class="fm-section" id="faq">
     <span class="fm-section-label">Before You Book</span>
     <h2>The questions we get asked most.</h2>
 
     <div class="fm-faq">
-      <details>
-        <summary>Am I fit enough?</summary>
-        <p>Almost certainly, and more so than you think. Every ride day has three distances, so you choose your level each morning rather than signing up to a number now &mdash; and the van is there if a day turns out to be more than you wanted. Where we&rsquo;d like you to be by October is comfortable at 50 km with some climbing, with one 70+ km ride in your legs. If that&rsquo;s a stretch from where you are today, say so when you register: your pre-arrival training plan is built to close exactly that gap.</p>
-      </details>
-      <details>
-        <summary>Will I be the only one coming alone?</summary>
-        <p>No &mdash; most riders come alone. The group is small, you&rsquo;re welcomed at the hotel, given time to settle in, and introduced properly at the welcome dinner. By Sunday nobody is a stranger.</p>
-      </details>
-      <details>
-        <summary>Do I have to share a room?</summary>
-        <p>Rooms at Hotel Bellver are double-share as standard &mdash; two riders, your own bed each, and a private en-suite between you. If you&rsquo;re coming alone we pair you with another solo rider, and we take care over it. If you&rsquo;d rather have the room to yourself, single occupancy is +&euro;360 for the week: choose it on the registration form. Coming with a friend? Say so and you&rsquo;ll room together.</p>
-      </details>
-      <details>
-        <summary>Who is the guest ambassador?</summary>
-        <p>We&rsquo;ll announce that nearer the time. Every edition brings a woman from inside the sport into the week &mdash; riding with the group, at the table in the evenings. It&rsquo;s a rider in the group, not a name on a poster, and we&rsquo;d rather confirm it properly than tease it.</p>
-      </details>
-      <details>
-        <summary>Do I need to bring my own bike?</summary>
-        <p>Yes &mdash; guests bring their own bike. A road bike with compact gearing (50/34 with an 11&ndash;32 or larger cassette) is what we&rsquo;d recommend for these climbs, serviced before you travel. You won&rsquo;t need tools or spare tubes: the van carries spares on every ride and the hotel has secure bike storage.</p>
-      </details>
-      <details>
-        <summary>How do I get there? Are transfers included?</summary>
-        <p>Fly to Valencia (VLC, about 60 minutes away and usually best-connected), Castell&oacute;n-Costa Azahar (CDT, around 30 minutes) or Reus (REU, about 90 minutes north). Trains down the coast are easy. Transfers aren&rsquo;t included this year, but we can arrange one from any of the three &mdash; tick &ldquo;request a transfer&rdquo; on the form and we&rsquo;ll send you a price.</p>
-      </details>
-      <details>
-        <summary>What if I can&rsquo;t keep up on the Queen Stage?</summary>
-        <p>Then you ride the 80 km option rather than the 120, or you take a lift in the van for a stretch and rejoin. Nobody gets dropped and nobody gets judged. The day exists to be earned in whatever form that takes for you.</p>
-      </details>
-      <details>
-        <summary>What happens after I register?</summary>
-        <p>We&rsquo;ll come back to you within 24 hours by email with a Revolut link for the &euro;150 deposit. Once it&rsquo;s paid your spot is confirmed, and you&rsquo;ll get the welcome guide, an invitation to the camp WhatsApp group, and a short fitness questionnaire that becomes your personalised training plan. From there we check in at set points &mdash; kit, dietary requirements, logistics &mdash; so nothing lands on you at the last minute.</p>
-      </details>
-      <details>
-        <summary>Can I pay the balance early, or in instalments?</summary>
-        <p>Yes to both &mdash; just tell us. The &euro;150 deposit holds your spot and comes off the total; the balance (&euro;849 on the private release, &euro;949 on the public release) is due by 23 August 2027, but we can send the link sooner or split it if that&rsquo;s easier.</p>
-      </details>
-    </div>
-  </section>
+<details><summary>Is the riding right for me?</summary><p>Tell us your usual distance, climbing and pace. We’ll discuss the proposed week with you. Final route and support arrangements will be confirmed before booking opens; the van is not a substitute for choosing a suitable riding level.</p></details>
+<details><summary>Can I come on my own?</summary><p>Yes. You can request a room share, or single occupancy for €360 extra, subject to availability. Shared rooms are intended for two riders with separate beds; the exact room configuration will be confirmed before booking.</p></details>
+<details><summary>I already have a coach. Is this for me?</summary><p>Yes. You don’t need to change coaches. This is a hosted cycling camp, and a personal training plan is not included.</p></details>
+<details><summary>Can I rent a bike?</summary><p>Yes. We rent premium carbon bikes with electronic shifting, including Specialized, Cube and other brands. Rental is priced separately from the camp; the model and size are subject to availability. Tick the bike-rental box on the form and we’ll send you a quote. You’re also welcome to bring your own serviced road bike.</p></details>
+<details><summary>Are transfers included?</summary><p>No. Ask for a separate quote, including your airport and travel dates. Transfer availability and the price must be confirmed separately.</p></details>
+<details><summary>How does the private release work?</summary><p>The list gets 72 hours of first access. The first four paid bookings are €999; remaining places are €1,099 and can be booked by the list as soon as those four are taken. Any places left after the private window open to the public at €1,099. Your price and room choice must be confirmed at checkout before payment.</p></details>
+<details><summary>What happens after I pay?</summary><p>Your payment provider issues a receipt. Your booking confirmation must show your room, total price, deposit and remaining balance. Departure confirmation is separate; wait for it before making non-refundable travel arrangements.</p></details>
+<details><summary>When is the balance due?</summary><p>23 August 2027. The balance depends on your booked rate and room choice. Ask us about payment arrangements before booking.</p></details>
+</div></section>
 
   <!-- REGISTER -->
   <section class="fm-section" id="register">
-    <span class="fm-section-label">Reserve Your Spot</span>
-    <h2 id="fm-register-h2">Register for The Femmes 2027.</h2>
-    <p class="fm-lead" id="fm-register-lead">Fill this in and we&rsquo;ll email you within 24 hours with a Revolut link for the &euro;150 deposit. Nothing is charged until you pay it &mdash; and your place is only held once you have.</p>
+    <span class="fm-section-label">Get in touch</span>
+    <h2 id="fm-register-h2">Ask us about TheFemmes.</h2>
+    <p class="fm-lead" id="fm-register-lead">Use this form for questions or launch updates. It does not reserve a place or take a payment.</p>
 
     <form class="fm-form" id="fm-register" novalidate>
       <div class="fm-form-grid">
@@ -1088,16 +960,16 @@
           <input type="email" id="f-email" name="email" autocomplete="email" required>
         </div>
         <div class="fm-field">
-          <label for="f-phone">WhatsApp number (with country code) <span>*</span></label>
-          <input type="tel" id="f-phone" name="phone" autocomplete="tel" placeholder="+44 7..." required>
+          <label for="f-phone">WhatsApp number (optional)</label>
+          <input type="tel" id="f-phone" name="phone" autocomplete="tel" placeholder="+44 7...">
         </div>
         <div class="fm-field">
           <label for="f-country">Where you&rsquo;re based</label>
           <input type="text" id="f-country" name="country" autocomplete="country-name" placeholder="City, country">
         </div>
         <div class="fm-field">
-          <label for="f-room">Room <span>*</span></label>
-          <select id="f-room" name="room" required>
+          <label for="f-room">Room preference (optional)</label>
+          <select id="f-room" name="room">
             <option value="">Choose one</option>
             <option value="Double-share">Double-share (standard price)</option>
             <option value="Single occupancy (+360)">Single occupancy (+&euro;360)</option>
@@ -1120,13 +992,16 @@
         </div>
         <div class="fm-field fm-field-full">
           <label for="f-notes">Anything we should know</label>
-          <textarea id="f-notes" name="notes" placeholder="Dietary requirements, injuries, questions, flights you have already booked..."></textarea>
+          <textarea id="f-notes" name="notes" placeholder="Your questions about the camp. Please do not include medical or other sensitive details."></textarea>
+        </div>
+        <div class="fm-field fm-field-full">
+          <label class="fm-check"><input type="checkbox" id="f-bike-rental" name="bike_rental" value="Yes"> I’d like a quote for premium carbon bike rental (priced separately)</label>
         </div>
         <div class="fm-field fm-field-full">
           <label class="fm-check"><input type="checkbox" id="f-transfer" name="transfer" value="Yes"> I&rsquo;d like a price for an airport transfer</label>
         </div>
         <div class="fm-field fm-field-full">
-          <label class="fm-check"><input type="checkbox" id="f-consent" name="consent" value="Yes" required> I&rsquo;m happy for Pedal &amp; Pause to contact me about The Femmes 2027 by email and WhatsApp. <span>*</span></label>
+          <label class="fm-check"><input type="checkbox" id="f-consent" name="consent" value="Yes" required> I’m happy for Pedal &amp; Pause to reply to this enquiry by email, or WhatsApp if I provide a number. <span>*</span></label>
         </div>
         <input type="hidden" name="intent" id="f-intent" value="Register interest">
         <div class="fm-hp" aria-hidden="true">
@@ -1135,17 +1010,17 @@
         </div>
       </div>
       <div class="fm-form-actions">
-        <button type="submit" class="fm-btn fm-btn-primary" id="fm-submit">Send my registration</button>
-        <span class="fm-form-note">No payment now. We reply within 24 hours on weekdays.</span>
+        <button type="submit" class="fm-btn fm-btn-primary" id="fm-submit">Send my enquiry</button>
+        <span class="fm-form-note">Enquiry only. A successful submission is not a booking.</span>
       </div>
-      <div class="fm-form-status" id="fm-status" hidden></div>
+      <div class="fm-form-status" id="fm-status" role="status" aria-live="polite" tabindex="-1" hidden></div>
     </form>
   </section>
 
   <!-- CTA -->
   <section class="fm-section fm-cta-section" id="contact">
     <span class="fm-section-label">Still Deciding</span>
-    <h2>A small camp. A real week. A four-star base by the sea.</h2>
+    <h2>A small camp. Five rides. Your week away.</h2>
     <p class="fm-lead">If you&rsquo;re weighing it up, ask us anything first. There&rsquo;s no such thing as a silly question, and no such thing as too many messages.</p>
     <div class="fm-buttons">
       <a class="fm-btn fm-btn-primary fm-book-btn" href="#pricing" data-track="cta_book">See the private release</a>
@@ -1157,6 +1032,7 @@
 </div>
 
 <footer class="fm-footer">
+<p><a id="privacy-link" hidden>Privacy notice</a></p>
   <div class="fm-tagline">Pedal. Pause. Belong.</div>
   <div class="fm-fine">Pedal and Pause SL &middot; Benic&agrave;ssim, Castell&oacute;n, Spain &middot; <a href="https://pedalandpause.com/thefemmes">pedalandpause.com/thefemmes</a></div>
 </footer>
@@ -1166,7 +1042,9 @@
   <a class="fm-btn fm-btn-primary fm-book-btn" id="fm-bar-btn" href="#pricing" data-track="bar_book">Reserve my place</a>
 </div>
 
-<script src="script.js?v=3"></script>
+<noscript><p class="femmes">Enable JavaScript for current booking availability. For enquiries, email info@pedalandpause.com.</p></noscript>
+<script src="offer.js?v=4"></script>
+<script src="script.js?v=4" defer></script>
 
 </body>
 </html>

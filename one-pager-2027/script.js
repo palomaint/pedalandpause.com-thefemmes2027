@@ -1,315 +1,60 @@
-/* The Femmes 2027 - page script
-   ------------------------------------------------------------------
-   Section 1: OFFER CONFIG  <- the only block you should need to edit
-   Section 2: offer engine (states, countdown, counts, buttons, sticky bar)
-   Section 3: registration form -> Google Sheets
-   Section 4: tracking hooks
-   After editing, bump ?v= on the <script> tag in index.html.           */
-(function () {
-  'use strict';
-
-  /* =============================== 1. OFFER CONFIG =============================== */
-  var OFFER = {
-    // Dates are ISO strings WITH the Madrid offset (+02:00 in summer, +01:00 in winter).
-    // These are the single fixed deadlines every visitor sees; the countdown is derived
-    // from them, so it can never restart on refresh.
-    privateOpens:    '2026-10-01T18:00:00+02:00',   // TODO confirm
-    privateDeadline: '2026-10-04T18:00:00+02:00',   // TODO confirm - 72 h after privateOpens
-    publicOpens:     '2026-10-06T10:00:00+02:00',   // TODO confirm - does NOT move earlier if private sells out
-    confirmBy:       '2027-07-23',                  // TODO confirm - departure-confirmation date shown in terms
-    minGroup:        6,                             // TODO confirm - minimum riders for the camp to run
-
-    totalPlaces: 10,
-    privatePlaces: 4,
-    interestCount: 80,
-
-    // Update these two from actual PAID deposits (Stripe dashboard / the Registrations sheet).
-    // Interest registrations and page views must never change them.
-    privateBooked: 0,
-    totalBooked: 0,
-
-    // Payment is by Revolut link, sent by email after a registration comes in - so these stay
-    // empty and every booking button goes to the registration form with the intent pre-filled.
-    // (If you ever move to a hosted checkout, paste its URLs here and the buttons switch over.)
-    checkoutPrivate: '',
-    checkoutPublic:  '',
-
-    pricePrivate: 999,
-    pricePublic: 1099,
-    deposit: 150
-  };
-
-  /* =============================== helpers =============================== */
-  var $ = function (id) { return document.getElementById(id); };
-  var MADRID = 'Europe/Madrid';
-  function fmtLong(iso) {
-    return new Intl.DateTimeFormat('en-GB', { timeZone: MADRID, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-      .format(new Date(iso)).replace(',', '') + ' (Madrid time)';
-  }
-  function fmtShort(iso) {
-    return new Intl.DateTimeFormat('en-GB', { timeZone: MADRID, day: 'numeric', month: 'short' }).format(new Date(iso));
-  }
-  function fmtDay(iso) {
-    return new Intl.DateTimeFormat('en-GB', { timeZone: MADRID, day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso));
-  }
-  function eur(n) { return '\u20AC' + n.toLocaleString('en-GB'); }
-  function setText(id, txt) { var el = $(id); if (el) el.textContent = txt; }
-  function setHTML(id, html) { var el = $(id); if (el) el.innerHTML = html; }
-
-  /* =============================== 4. tracking =============================== */
-  // Fires to whatever analytics is on the page: Plausible, GA4 (gtag), or a GTM dataLayer.
-  // Add one of those and these events start flowing; without them it is a no-op.
-  function track(name, props) {
-    props = props || {};
-    try { if (window.plausible) window.plausible(name, { props: props }); } catch (e) {}
-    try { if (window.gtag) window.gtag('event', name, props); } catch (e) {}
-    try { (window.dataLayer = window.dataLayer || []).push(Object.assign({ event: name }, props)); } catch (e) {}
-  }
-  window.fmTrack = track;
-
-  /* =============================== 2. offer engine =============================== */
-  function offerState(now) {
-    var pOpen = new Date(OFFER.privateOpens), pEnd = new Date(OFFER.privateDeadline), pubOpen = new Date(OFFER.publicOpens);
-    var privateLeft = Math.max(0, OFFER.privatePlaces - OFFER.privateBooked);
-    var totalLeft = Math.max(0, OFFER.totalPlaces - OFFER.totalBooked);
-    if (totalLeft === 0) return 'sold_out';
-    if (now >= pubOpen) return 'public_open';
-    if (now < pOpen) return 'before_private';
-    if (privateLeft === 0) return 'private_sold_out';
-    if (now >= pEnd) return 'private_closed';
-    return 'private_open';
-  }
-
-  function bookHref(tier) {
-    var url = tier === 'private' ? OFFER.checkoutPrivate : OFFER.checkoutPublic;
-    return url || '#register';
-  }
-  function bookBtn(tier, label, extraClass) {
-    return '<a class="fm-btn fm-btn-primary fm-book-btn ' + (extraClass || '') + '" href="' + bookHref(tier) + '" data-tier="' + tier + '" data-track="' + tier + '_book">' + label + '</a>';
-  }
-  function staticLabel(text) { return '<span class="fm-card-static">' + text + '</span>'; }
-  function heroToPublicTeaser() {
-    setHTML('fm-hero-fine', 'The private release has closed. Remaining places open to public booking at ' + eur(OFFER.pricePublic) + ' on ' + fmtLong(OFFER.publicOpens) + '.');
-    document.querySelectorAll('[data-track="hero_book"],[data-track="cta_book"]').forEach(function (b) { b.textContent = 'See the public release'; b.setAttribute('href', '#pricing'); });
-  }
-
-  function renderOffer() {
-    var now = new Date();
-    var state = offerState(now);
-    var privateLeft = Math.max(0, OFFER.privatePlaces - OFFER.privateBooked);
-    var totalLeft = Math.max(0, OFFER.totalPlaces - OFFER.totalBooked);
-
-    // dates in copy
-    document.querySelectorAll('[data-date]').forEach(function (el) { el.textContent = fmtLong(OFFER[el.getAttribute('data-date')]); });
-    document.querySelectorAll('[data-date-short]').forEach(function (el) {
-      var k = el.getAttribute('data-date-short'); el.textContent = k === 'confirmBy' ? fmtDay(OFFER[k]) : fmtShort(OFFER[k]);
-    });
-    document.querySelectorAll('[data-config]').forEach(function (el) { el.textContent = OFFER[el.getAttribute('data-config')]; });
-    setText('fm-interest-count', OFFER.interestCount);
-
-    // counts (from booking records only)
-    setText('fm-private-left', privateLeft);
-    setText('fm-total-left', totalLeft);
-    setText('fm-total-left-2', totalLeft);
-
-    var privateCard = $('fm-card-private'), publicCard = $('fm-card-public');
-    var barOn = false, barTotal = '', barLabel = 'Reserve my place', barHref = '#pricing';
-
-    switch (state) {
-      case 'before_private':
-        setText('fm-private-badge', 'Private release \u00B7 opens ' + fmtShort(OFFER.privateOpens));
-        setHTML('fm-private-action', staticLabel('Opens ' + fmtLong(OFFER.privateOpens)));
-        setText('fm-deadline-label', 'Private pricing opens');
-        $('fm-countdown').hidden = true;
-        setHTML('fm-deadline-when', 'Booking opens for the interest list on ' + fmtLong(OFFER.privateOpens) + ' and runs for 72 hours or until four places are taken.');
-        setHTML('fm-public-action', staticLabel('Opens ' + fmtShort(OFFER.publicOpens)));
-        setText('fm-hero-release', 'Private release \u00B7 opens ' + fmtShort(OFFER.privateOpens));
-        break;
-
-      case 'private_open':
-        setText('fm-private-badge', 'Private release \u00B7 first 4 bookings');
-        setHTML('fm-private-action', bookBtn('private', 'Secure my ' + eur(OFFER.pricePrivate) + ' place'));
-        setText('fm-deadline-label', 'Private pricing ends in');
-        $('fm-countdown').hidden = false;
-        setHTML('fm-public-action', staticLabel('Opens ' + fmtShort(OFFER.publicOpens)));
-        setText('fm-hero-release', 'Private release open \u00B7 first 4 bookings \u00B7 72 hours');
-        barOn = true; barTotal = eur(OFFER.pricePrivate) + ' total'; barHref = bookHref('private');
-        break;
-
-      case 'private_sold_out':
-        setText('fm-private-badge', 'Private release sold out');
-        $('fm-private-badge').classList.add('fm-badge-muted');
-        setHTML('fm-private-action', staticLabel('Private release sold out'));
-        $('fm-deadline').hidden = true;
-        setHTML('fm-public-copy', 'All four private-release places are taken. Remaining places open to public booking on <strong>' + fmtLong(OFFER.publicOpens) + '</strong>.');
-        setHTML('fm-public-action', staticLabel('Opens ' + fmtShort(OFFER.publicOpens)));
-        setText('fm-hero-release', 'Private release sold out \u00B7 public release ' + fmtShort(OFFER.publicOpens));
-        heroToPublicTeaser();
-        break;
-
-      case 'private_closed':
-        setText('fm-private-badge', 'Private release closed');
-        $('fm-private-badge').classList.add('fm-badge-muted');
-        setHTML('fm-private-action', staticLabel('Private release closed'));
-        $('fm-deadline').hidden = true;
-        setHTML('fm-public-copy', 'The private window has closed. Remaining places open to public booking on <strong>' + fmtLong(OFFER.publicOpens) + '</strong>.');
-        setHTML('fm-public-action', staticLabel('Opens ' + fmtShort(OFFER.publicOpens)));
-        setText('fm-hero-release', 'Private release closed \u00B7 public release ' + fmtShort(OFFER.publicOpens));
-        heroToPublicTeaser();
-        break;
-
-      case 'public_open':
-        // public price becomes the main offer; the private card steps back
-        privateCard.classList.remove('fm-card-private'); privateCard.classList.add('fm-card-public');
-        publicCard.classList.remove('fm-card-public'); publicCard.classList.add('fm-card-private');
-        setText('fm-private-badge', 'Private release closed');
-        $('fm-private-badge').classList.add('fm-badge-muted');
-        setHTML('fm-private-action', staticLabel('Private release closed'));
-        $('fm-deadline').hidden = true;
-        $('fm-card-private').querySelector('.fm-counts').hidden = true;
-        setHTML('fm-public-copy', 'Public booking is open. ' + totalLeft + ' of ' + OFFER.totalPlaces + ' camp places remain.');
-        setHTML('fm-public-action', bookBtn('public', 'Reserve my ' + eur(OFFER.pricePublic) + ' place'));
-        $('fm-public-counts').hidden = false;
-        setText('fm-hero-release', 'Public release open \u00B7 ' + totalLeft + ' places left');
-        setHTML('fm-hero-fine', 'Public release: ' + eur(OFFER.pricePublic) + ' per person, shared double room. A ' + eur(OFFER.deposit) + ' deposit reserves your place.');
-        document.querySelectorAll('[data-track="hero_book"],[data-track="cta_book"]').forEach(function (b) { b.textContent = 'Reserve my ' + eur(OFFER.pricePublic) + ' place'; });
-        barOn = true; barTotal = eur(OFFER.pricePublic) + ' total'; barHref = bookHref('public');
-        break;
-
-      case 'sold_out':
-        setText('fm-private-badge', 'Fully booked');
-        $('fm-private-badge').classList.add('fm-badge-muted');
-        setHTML('fm-private-action', '<a class="fm-btn fm-btn-secondary fm-book-btn" href="#register" data-tier="waitlist" data-track="waitlist">Join the cancellation waiting list</a>');
-        $('fm-deadline').hidden = true;
-        setHTML('fm-public-copy', 'All ten places are booked. Join the waiting list and you\u2019re first to hear if one comes free.');
-        setHTML('fm-public-action', '<a class="fm-btn fm-btn-secondary fm-book-btn" href="#register" data-tier="waitlist" data-track="waitlist">Join the cancellation waiting list</a>');
-        setText('fm-hero-release', 'Fully booked \u00B7 waiting list open');
-        setHTML('fm-hero-fine', 'All ten places for 2027 are taken. Join the cancellation waiting list and you\u2019re first to hear if one comes free.');
-        document.querySelectorAll('[data-track="hero_book"],[data-track="cta_book"]').forEach(function (b) { b.textContent = 'Join the cancellation waiting list'; b.setAttribute('href', '#register'); b.setAttribute('data-tier', 'waitlist'); });
-        setText('fm-register-h2', 'Join the cancellation waiting list.');
-        setText('fm-register-lead', 'Leave your details and you\u2019re first in line if a place comes free. No payment, no obligation.');
-        break;
-    }
-
-    // sticky bar (mobile only via CSS); hidden while the pricing cards or the form are on screen
-    var bar = $('fm-bar');
-    if (barOn) {
-      $('fm-bar-total').textContent = barTotal;
-      $('fm-bar-btn').setAttribute('href', barHref);
-      $('fm-bar-btn').textContent = barLabel;
-      document.body.classList.add('fm-bar-on'); bar.setAttribute('aria-hidden', 'false');
-      if ('IntersectionObserver' in window) {
-        var hideNear = new IntersectionObserver(function (entries) {
-          var anyVisible = entries.some(function (e) { return e.isIntersecting; });
-          bar.style.display = anyVisible ? 'none' : '';
-        }, { threshold: 0.05 });
-        [$('fm-card-private'), $('fm-register')].forEach(function (el) { if (el) hideNear.observe(el); });
-      }
-    } else {
-      document.body.classList.remove('fm-bar-on'); bar.setAttribute('aria-hidden', 'true');
-    }
-
-    document.body.setAttribute('data-offer-state', state);
-    return state;
-  }
-
-  function tickCountdown() {
-    var el = $('fm-countdown'); if (!el || el.hidden) return;
-    var ms = new Date(OFFER.privateDeadline) - new Date();
-    if (ms <= 0) { renderOffer(); return; }
-    var m = Math.floor(ms / 60000);
-    setText('cd-d', Math.floor(m / 1440));
-    setText('cd-h', Math.floor((m % 1440) / 60));
-    setText('cd-m', m % 60);
-  }
-
-  var state = renderOffer();
-  tickCountdown();
-  // Preview any state from the browser console without editing the file, e.g.
-  //   FM.offer.privateBooked = 4; FM.render()
-  window.FM = { offer: OFFER, render: function () { location.reload(); } };
-  try {
-    var ov = sessionStorage.getItem('fm-offer-override');
-    if (ov) { Object.assign(OFFER, JSON.parse(ov)); state = renderOffer(); tickCountdown(); }
-  } catch (e) {}
-  setInterval(tickCountdown, 30000);
-  // re-evaluate state when a deadline passes while the page is open
-  [OFFER.privateOpens, OFFER.privateDeadline, OFFER.publicOpens].forEach(function (iso) {
-    var wait = new Date(iso) - new Date();
-    if (wait > 0 && wait < 2147483647) setTimeout(function () { renderOffer(); tickCountdown(); }, wait + 500);
-  });
-
-  // booking buttons: track, and when falling back to the form, pre-set the intent
-  document.addEventListener('click', function (e) {
-    var a = e.target.closest && e.target.closest('.fm-book-btn'); if (!a) return;
-    var tier = a.getAttribute('data-tier') || '';
-    var href = a.getAttribute('href') || '';
-    track('booking_button_click', { tier: tier, source: a.getAttribute('data-track') || '', state: state });
-    if (/^https?:/.test(href)) { track('checkout_start', { tier: tier }); return; }   // Stripe link: let it navigate
-    if (href === '#register' && tier) {
-      var intent = $('f-intent');
-      if (intent) intent.value = tier === 'private' ? 'Private release \u20AC999 - send deposit link'
-                                : tier === 'public' ? 'Public release \u20AC1,099 - send deposit link'
-                                : tier === 'waitlist' ? 'Cancellation waiting list' : 'Register interest';
-    }
-  });
-
-  // pricing section visit (once per page view)
-  if ('IntersectionObserver' in window && $('pricing')) {
-    var seen = false;
-    new IntersectionObserver(function (entries, obs) {
-      if (!seen && entries.some(function (e) { return e.isIntersecting; })) { seen = true; track('pricing_section_view', { state: state }); obs.disconnect(); }
-    }, { threshold: 0.2 }).observe($('pricing'));
-  }
-
-  /* =============================== 3. registration form =============================== */
-  var ENDPOINT = 'PASTE_APPS_SCRIPT_URL_HERE';
-  var form = $('fm-register'); if (!form) return;
-  var status = $('fm-status'), submit = $('fm-submit');
-
-  function show(kind, html) {
-    status.className = 'fm-form-status ' + kind; status.innerHTML = html; status.hidden = false;
-    status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-  function validate() {
-    var ok = true;
-    form.querySelectorAll('[required]').forEach(function (el) {
-      var field = el.closest('.fm-field');
-      var valid = el.type === 'checkbox' ? el.checked
-                : el.type === 'email' ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim())
-                : el.value.trim().length > 0;
-      if (field) field.classList.toggle('fm-invalid', !valid);
-      if (!valid) ok = false;
-    });
-    return ok;
-  }
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (form.website && form.website.value) return; // honeypot
-    if (!validate()) { show('fm-err', 'A couple of fields still need filling in &mdash; they&rsquo;re marked in coral above.'); return; }
-    if (ENDPOINT === 'PASTE_APPS_SCRIPT_URL_HERE') {
-      show('fm-err', 'The form isn&rsquo;t connected yet. Please WhatsApp us on <a href="https://wa.me/34648565635">+34 648 565 635</a> or email <a href="mailto:info@pedalandpause.com">info@pedalandpause.com</a> and we&rsquo;ll register you by hand.');
-      return;
-    }
-    var data = new FormData(form);
-    data.set('camp', 'The Femmes 2027'); data.set('page', location.href); data.set('submitted_at', new Date().toISOString());
-    data.set('offer_state', state); data.delete('website');
-    submit.disabled = true; submit.textContent = 'Sending...';
-    // Apps Script sends no CORS headers, so the response is opaque (no-cors). A resolved fetch means the
-    // request LEFT the browser, not that the sheet accepted it. Verify with curl after every redeploy.
-    fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(data) })
-      .then(function () {
-        track('form_submitted', { intent: data.get('intent') || '' });
-        form.reset();
-        show('fm-ok', '<strong>Thank you &mdash; we have your details.</strong> Paloma will email you within 24 hours on weekdays with a Revolut link for the &euro;150 deposit, plus answers to anything you asked. Your place is held once the deposit is paid. If you don&rsquo;t hear from us in that time, check your spam folder, then WhatsApp <a href="https://wa.me/34648565635">+34 648 565 635</a>.<br><br><a href="#top">&larr; Back to the top of the page</a>');
-        submit.textContent = 'Sent';
-      })
-      .catch(function () {
-        show('fm-err', 'That didn&rsquo;t go through. Please try once more, or WhatsApp us on <a href="https://wa.me/34648565635">+34 648 565 635</a> and we&rsquo;ll register you by hand.');
-        submit.disabled = false; submit.textContent = 'Send my registration';
-      });
-  });
-  form.addEventListener('input', function (e) {
-    var field = e.target.closest && e.target.closest('.fm-field'); if (field) field.classList.remove('fm-invalid');
-  });
+(function(){
+'use strict';
+const $=id=>document.getElementById(id),money=n=>'€'+n.toLocaleString('en-GB');
+const date=iso=>new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',weekday:'short',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(iso))+' (Madrid time)';
+let current=null,refreshing=false,requestId=crypto.randomUUID();
+function text(id,value){const el=$(id);if(el)el.textContent=value;}
+function track(name,props={}){window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:name,...props});}
+function staticAction(id,label){const el=$(id);el.replaceChildren();const item=document.createElement('span');item.className='fm-card-static';item.textContent=label;el.append(item);}
+function action(id,label){const el=$(id);el.replaceChildren();const a=document.createElement('a');a.href='#book';a.className='fm-btn fm-btn-primary';a.textContent=label;el.append(a);}
+function render(c){
+ current=c;
+ document.body.dataset.offerState=c.state;
+ const privacy=$('privacy-link');if(/^https:\/\//.test(c.privacyUrl||'')){privacy.href=c.privacyUrl;privacy.hidden=false;}
+ const before=c.state==='before_private',sold=c.state==='sold_out',cheap=c.state==='private_open',listStandard=c.state==='list_standard';
+ const enabled=c.bookingEnabled&&Array.isArray(c.options)&&c.options.length>0;
+ const phase=before?'Private release opens '+date(c.privateOpens):sold?'Fully booked · cancellation waiting list':cheap?'Private release · first four at €999':listStandard?'Interest list access · €1,099':'Public booking · €1,099';
+ text('fm-hero-release',c.releaseConfirmed?phase:'2027 release · dates being finalised');
+ text('fm-private-badge',before?'First four bookings · €999':cheap?'First four bookings · €999':c.privateBooked>=4?'Four first-price places booked':'First-price release closed');
+ $('fm-card-private').classList.toggle('fm-card-private',before||cheap);
+ $('fm-card-public').classList.toggle('fm-card-private',listStandard||c.state==='public_open');
+ text('fm-private-pay',before?'€150 deposit when booking opens. Remaining balance: €849.':'€150 deposit towards €999. Remaining balance: €849.');
+ text('fm-public-copy',before?'After four €999 places are booked, the list can immediately book remaining places at €1,099.':listStandard?'The four €999 places are booked. The list can book remaining places now at €1,099.':'Standard price for remaining places: €1,099.');
+ text('fm-private-left',c.availabilityUpdatedAt?Math.max(0,Math.min(4-c.privateBooked,10-c.totalBooked)):'—');
+ text('fm-total-left',c.availabilityUpdatedAt?10-c.totalBooked:'—');text('fm-total-left-2',c.availabilityUpdatedAt?10-c.totalBooked:'—');
+ text('fm-availability-note',c.availabilityUpdatedAt?'Booking records last updated '+date(c.availabilityUpdatedAt)+'. Availability is checked again by Revolut at payment.':'Availability will be confirmed when booking opens.');
+ $('fm-deadline').hidden=sold||c.state==='public_open';
+ text('fm-deadline-label',before?'Private access opens':'Private access ends');
+ text('fm-deadline-when',c.releaseConfirmed?(before?date(c.privateOpens)+' — private access lasts 72 hours. ':'Private access ends '+date(c.privateDeadline)+'. ')+'Public access starts '+date(c.publicOpens)+', if places remain.':'Release dates will be confirmed before booking opens.');
+ $('fm-countdown').hidden=!c.releaseConfirmed||before||sold||c.state==='public_open';
+ const label=!c.releaseConfirmed?'Release being finalised':before?'Opens '+date(c.privateOpens):sold?'Fully booked':!enabled?'Booking not yet available':'View rooms & pay deposit';
+ staticAction('fm-private-action',cheap||before?label:(c.privateBooked>=4?'First four places booked':'First-price release closed'));
+ staticAction('fm-public-action',before?'Interest list access after the first four bookings':label);
+ if(enabled)action(cheap?'fm-private-action':'fm-public-action','Choose room · €150 deposit');
+ $('book').hidden=!enabled;
+ const select=$('booking-room'),old=select.value;select.replaceChildren();
+ for(const o of c.options||[]){const option=document.createElement('option');option.value=o.id;option.textContent=(o.room==='single'?'Single occupancy':'Shared room')+' · '+money(o.total)+' total';select.append(option);}
+ if([...select.options].some(o=>o.value===old))select.value=old;
+ updateBookingSummary();
+ const terms=$('booking-terms-link');if(/^https:\/\//.test(c.termsUrl||'')){terms.href=c.termsUrl;terms.hidden=false;text('fm-terms-pending','Read the complete booking terms, including cancellation and departure-confirmation conditions, before paying.');}else{terms.hidden=true;}
+ document.querySelectorAll('[data-track="hero_book"],[data-track="cta_book"],.fm-nav-cta').forEach(a=>{a.href=sold?'#register':'#pricing';a.textContent=sold?'Join waiting list':enabled?'Prices & booking':'See prices & release';});
+ text('fm-hero-fine',sold?'All ten places are booked. Enquire about the cancellation waiting list.':'Ten places. First four paid bookings: €999; remaining places: €1,099. Shared room, €150 deposit towards the total.');
+ if(sold){text('fm-register-h2','Join the cancellation waiting list.');text('fm-register-lead','Leave your details for cancellation updates. This does not reserve a place.');$('f-intent').value='Cancellation waiting list';}
+ text('fm-bar-total',money(cheap?999:1099)+' total');$('fm-bar-btn').href='#book';$('fm-bar-btn').textContent='Choose room';
+ $('fm-bar').hidden=!enabled;document.body.classList.toggle('fm-bar-on',enabled);$('fm-bar').setAttribute('aria-hidden',String(!enabled));
+ tick();
+}
+function updateBookingSummary(){const o=current?.options?.find(o=>o.id===$('booking-room').value);text('booking-summary',o?money(o.total)+' total · '+money(o.deposit)+' deposit today · '+money(o.total-o.deposit)+' remaining, due 23 August 2027.':'');}
+function tick(){if(!current||$('fm-countdown').hidden)return;const m=Math.max(0,Math.ceil((Date.parse(current.privateDeadline)-Date.now())/60000));text('cd-d',Math.floor(m/1440));text('cd-h',Math.floor(m%1440/60));text('cd-m',m%60);}
+async function refresh(){if(refreshing)return;refreshing=true;try{const r=await fetch('/api/offer',{cache:'no-store',signal:AbortSignal.timeout(8000)});if(!r.ok)throw Error();const c=await r.json();if(!['before_private','private_open','list_standard','public_open','sold_out'].includes(c.state))throw Error();render(c);}catch{current=null;staticAction('fm-private-action','Contact us for booking availability');staticAction('fm-public-action','Contact us for booking availability');text('fm-private-left','—');text('fm-total-left','—');$('book').hidden=true;$('fm-bar').hidden=true;document.body.classList.remove('fm-bar-on');text('fm-hero-release','TheFemmes 2027 · enquire about availability');$('fm-countdown').hidden=true;}finally{refreshing=false;}}
+$('booking-room').addEventListener('change',updateBookingSummary);
+$('booking-form').addEventListener('submit',async e=>{e.preventDefault();if(!$('booking-form').reportValidity())return;const b=$('checkout-button');b.disabled=true;text('checkout-status','Checking your offer…');try{const r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({option:$('booking-room').value,termsAccepted:$('accept-terms').checked}),signal:AbortSignal.timeout(8000)});const data=await r.json();if(!r.ok||!data.ok||!FemmesOffer.validLink(data.url))throw Error(data.error||'Payment is unavailable. Please try again.');track('checkout_start',{total:data.total,currency:'EUR'});window.location.assign(data.url);}catch(err){text('checkout-status',err.message);b.disabled=false;await refresh();}});
+const menu=document.querySelector('.fm-menu-toggle');menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));$('fm-nav-links').classList.toggle('is-open',open);});
+document.querySelectorAll('.fm-nav a').forEach(a=>a.addEventListener('click',()=>{menu.setAttribute('aria-expanded','false');$('fm-nav-links').classList.remove('is-open');}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){menu.setAttribute('aria-expanded','false');$('fm-nav-links').classList.remove('is-open');}});
+if('IntersectionObserver'in window){const visible=new Set();new IntersectionObserver(entries=>{for(const e of entries){if(e.isIntersecting)visible.add(e.target);else visible.delete(e.target);}$('fm-bar').style.display=visible.size?'none':'';},{threshold:.05}).observe($('book'));let seen=false;new IntersectionObserver(entries=>{if(!seen&&entries.some(e=>e.isIntersecting)){seen=true;track('pricing_section_view');}},{threshold:.1}).observe($('pricing'));}
+const form=$('fm-register'),status=$('fm-status'),submit=$('fm-submit');
+function message(ok,value){status.hidden=false;status.className='fm-form-status '+(ok?'fm-ok':'fm-err');status.textContent=value;status.focus();}
+form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const data=Object.fromEntries(new FormData(form));data.request_id=requestId;submit.disabled=true;submit.textContent='Sending…';try{const r=await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),signal:AbortSignal.timeout(16000)});const result=await r.json();if(!r.ok||result.ok!==true||result.request_id!==requestId)throw Error(result.error||'We could not confirm receipt. Please retry or email info@pedalandpause.com.');track('enquiry_received');message(true,'Your enquiry has been received. This is not a booking or payment confirmation. We will reply by email.');form.reset();requestId=crypto.randomUUID();}catch(err){message(false,err.message);}finally{submit.disabled=false;submit.textContent='Send my enquiry';}});
+refresh();setInterval(()=>{tick();refresh();},30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
 })();
