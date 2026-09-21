@@ -1,3 +1,7 @@
+# Current deployment: Cloudflare Pages
+
+For the Wix-owned domain, follow [CLOUDFLARE-SETUP.md](CLOUDFLARE-SETUP.md). Use `npm run build:pages` with output `dist-pages`. The Worker commands below are retained only for the earlier deployment.
+
 # TheFemmes 2027 — Pedal & Pause
 
 Responsive two-edition website, with a registration API for a private Supabase database. No application dependencies, trackers, secret values or payment-card collection in the browser.

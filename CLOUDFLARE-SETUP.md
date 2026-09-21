@@ -1,54 +1,58 @@
-# Publish TheFemmes on Cloudflare
+# Publish TheFemmes with Cloudflare Pages and a Wix domain
 
-## 1. Put the project in GitHub
+Use a new **Pages** project linked to the existing GitHub repository. The existing Worker can stay in place while Pages is verified. No domain transfer is needed.
 
-Unzip the delivery package. Create a private GitHub repository, for example `thefemmes-2027`, and upload the project contents so `package.json`, `wrangler.jsonc` and `worker.mjs` appear at the repository root. Upload all folders as well. Do not upload `node_modules`, `.env`, `.dev.vars`, `.wrangler` or real guest data.
+## 1. Create the Pages project
 
-## 2. Connect Cloudflare
-
-In Cloudflare, open Workers & Pages and create an application by importing a GitHub repository. Choose **Workers**, not a static-only file upload. Authorise only the needed repository.
-
-Use these settings:
+In Cloudflare Workers & Pages, choose Create application, then the Pages option (sometimes labelled Get started under Pages), then connect GitHub. Select `palomaint/pedalandpause.com-thefemmes2027`.
 
 | Setting | Value |
 |---|---|
-| Worker/project name | `thefemmes-2027` (must match wrangler.jsonc) |
-| Root directory | Repository root |
-| Build command | `npm run build` |
-| Deploy command | `npx wrangler deploy` |
-| Node version | 22 or newer (set build variable NODE_VERSION=22 if necessary) |
+| Production branch | `main` |
+| Framework preset | None |
+| Root directory | Leave blank (repository root) |
+| Build command | `npm run build:pages` |
+| Build output directory | `dist-pages` |
+| Build environment variable | `NODE_VERSION=22` |
 
-Cloudflare installs the locked dependencies. Static assets are in `dist`; `/api/*` routes run in the Worker. The first deployment is safe to review: registration is closed by default. Copy its `https://...workers.dev` URL for the connection steps. Add a custom domain later if desired.
+Pages uses its own deployment process: do not enter `npx wrangler deploy`. The existing `wrangler.jsonc` is for the earlier Worker only; it has no Pages output setting. Pages settings and runtime variables are managed in its dashboard.
 
-## 3. Connect your registration storage and anti-spam check
+The build packages the existing booking backend into Pages' reserved `_worker.js` entry point. `_routes.json` sends only `/api/*` through the function. Static files use `public/_headers`. No credentials are included in the bundle. Registration stays disabled until configured.
 
-Create your Supabase project and run `database/setup.sql`. Create a Cloudflare Turnstile widget that allows the published hostname.
+## 2. Add the Wix subdomain
 
-Under the Worker's runtime **Settings → Variables and Secrets**, add these as **secrets**, not public build variables:
+After the Pages deployment succeeds, open its Custom domains section and add `thefemmes.pedalandpause.com` first. Cloudflare will show the exact CNAME target, normally your project's `*.pages.dev` address.
 
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `TURNSTILE_SECRET_KEY`
+In Wix, open the domain's DNS records and add a CNAME with host `thefemmes` and the exact target Cloudflare supplies (no https:// or path). If that host already exists, review it before replacing anything. Preserve the main website and email records. Do not change nameservers.
 
-Add the following non-secret runtime values to the `vars` object in `wrangler.jsonc`, then commit and push. Keeping ordinary variables in the file avoids a later GitHub deployment overwriting dashboard-only settings:
+Wait for Cloudflare to verify the domain and issue its HTTPS certificate, then check the site on the custom address.
 
-- `SITE_ORIGIN`: the exact site origin, e.g. `https://thefemmes-2027.example.workers.dev`, with no trailing slash.
+## 3. Connect the booking backend
+
+Create a Supabase project and run `database/setup.sql`. Create a Cloudflare Turnstile widget allowing the final custom hostname.
+
+In the Pages project's Settings → Variables and Secrets, configure Production:
+
+- `REGISTRATION_ENABLED=false` until final live testing is ready.
+- `SITE_ORIGIN=https://thefemmes.pedalandpause.com` (no trailing slash).
 - `SUPABASE_URL`: your project's HTTPS URL.
-- `TURNSTILE_SITE_KEY`: your widget's public site key.
+- `TURNSTILE_SITE_KEY`: public widget key.
+- `MAY_TIER=first`
+- `OCTOBER_TIER=first`
 
-Keep `REGISTRATION_ENABLED` set to `false` until the privacy notice and booking workflow have been reviewed. Then change it to `true`, commit and deploy. Never put a secret in `wrangler.jsonc` or paste it into chat.
+Store `SUPABASE_SERVICE_ROLE_KEY` and `TURNSTILE_SECRET_KEY` as encrypted secrets. Never put them in GitHub or chat. Redeploy after changing these settings. Keep Preview registration disabled and do not copy production secrets to previews.
 
-## 4. Verify before sharing with guests
+After reviewing booking conditions and the privacy notice, set Production `REGISTRATION_ENABLED=true`, redeploy, and submit a clearly labelled test. Check the stored row, edition, room, rental preference and price. Success must mean the database acknowledged storage. Email notifications and Google Sheets sync are not implemented. Requests do not reserve seats or take payment.
 
-Submit a clearly labelled test registration on the published site. Check that the matching row appears in the database as `pending_review`, with the correct edition, room and rental preference. A success message is only returned after the database acknowledges storage. Email notification and Sheet synchronisation are not enabled in this version. Registration does not reserve a seat or take payment.
+## 4. Manage prices
 
-Confirm the guest's room, total price and conditions before sending their Revolut link. Mark the booking confirmed only after you verify payment. Configure host-level rate limiting for the registration endpoint and monitor submissions. Never open public read access to the database table.
+Change the appropriate Production variable `MAY_TIER` or `OCTOBER_TIER` to `standard` after four verified introductory bookings, or `full` when capacity is exhausted, and redeploy. Reconcile payments and room occupancy manually before changing tiers.
 
-## Price allocations
+## Verification
 
-Change `MAY_TIER` or `OCTOBER_TIER` in `wrangler.jsonc` to `standard` after four verified introductory bookings, or `full` when capacity is exhausted, then push. Requests are not payments and must not count as confirmed seats. Reconcile room occupancy as well as guest numbers, especially for private Casa rooms.
+`npm test` checks validation, server-owned prices, mocked CAPTCHA/storage, request limits, the Cloudflare adapter and the actual self-contained Pages bundle. Live storage and CAPTCHA testing needs the configured accounts.
 
-## What has been tested locally
-
-The shared registration logic and Cloudflare request adapter have automated checks covering validation, server-owned prices, origin checks, mocked anti-spam/database responses, method routing, size limits and disabled registration. A deployment dry run validates packaging. A live database/Turnstile test still requires your own configured accounts.
-
-Reference: https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/github-integration/
+References:
+- https://developers.cloudflare.com/pages/functions/advanced-mode/
+- https://developers.cloudflare.com/pages/configuration/custom-domains/
+- https://support.wix.com/en/article/connecting-a-wix-domain-to-an-external-site
