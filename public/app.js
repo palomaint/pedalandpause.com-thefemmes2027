@@ -5,7 +5,7 @@ nav.addEventListener('click',e=>{if(e.target.closest('a')){menu.setAttribute('ar
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav.classList.contains('open')){menu.setAttribute('aria-expanded','false');nav.classList.remove('open');menu.focus();}});
 const form=document.querySelector('#booking-form'),room=document.querySelector('#room'),statusEl=document.querySelector('#form-status'),submit=document.querySelector('#submit-booking');
 let available=false,busy=false,token='',requestId=null,lastPayload='',widget=null;
-let offers={may:{price:749,tier:'First 4 bookings · then €795',available:true},october:{price:999,tier:'First 4 bookings · then €1,099',available:true}};
+let offers={may:{price:795,tier:'Introductory allocation filled · Standard price',available:true},october:{price:999,tier:'3 introductory places remaining · then €1,099',available:true}};
 function edition(){return form.elements.edition.value;}
 function message(text,type=''){statusEl.textContent=text;statusEl.className=type;}
 function updateSummary(){const id=edition(),o=offers[id],privateRoom=room.value==='private';document.querySelector('#summary-edition').textContent=id==='may'?'Casa Edition · 15–21 May':'Bellver Edition · 22–28 October';document.querySelector('#summary-price').textContent=privateRoom&&id==='may'?'Private room: quote on request':`From €${(o.price+(privateRoom?360:0)).toLocaleString('en-IE')} per person`;document.querySelector('#summary-detail').textContent=privateRoom?'Subject to room availability. Rental is quoted separately.':'Shared room. Price allocation confirmed before payment.';submit.disabled=!available||busy||!o.available;}
