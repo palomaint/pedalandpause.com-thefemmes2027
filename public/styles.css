@@ -10,3 +10,6 @@
 @media(max-width:359px){.event-brand{width:112px}.event-brand img{width:112px;height:112px;top:-31px}.organiser>span:first-child{display:none}}
 
 .other-card .experience-image{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain}
+
+/* Introductory allocation progress: four offer places, not total camp capacity. */
+.demand-card{background:#fff1ef;border:1px solid #fe5756;border-left:5px solid #fe5756;padding:20px;margin:24px 0;color:var(--ink)}.demand-kicker{display:block;font-size:11px;font-weight:800;letter-spacing:.12em;margin-bottom:10px}.demand-card>strong{display:block;font-size:25px;line-height:1.15;letter-spacing:-.02em}.allocation-track{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:16px 0 12px}.allocation-track span{height:9px;border-radius:10px;background:white;border:1px solid #fe5756}.allocation-track .taken{background:#fe5756}.demand-card p{font-size:13px;line-height:1.5;margin:0}.demand-card[hidden]{display:none}@media(max-width:600px){.demand-card{padding:16px}.demand-card>strong{font-size:23px}}
